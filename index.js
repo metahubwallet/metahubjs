@@ -16,33 +16,29 @@ var MetahubJS = {};
     }
     document.addEventListener('metahubLoaded', metahubLoaded);
     document.addEventListener('scatterLoaded', metahubLoaded);
-    var appName;
-    var chainId;
-    MetahubJS.connect = function(name, options) {
-        appName = name;
-        chainId = options.network && options.network.chainId ? options.network.chainId : 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906';
-        console.log({ appName: appName, chainId: chainId});
+    MetahubJS.connect = function() {
         return new Promise(function(resolve) {
             if (loaded) {
                 resolve(true);
             } else {
                 var times = 0;
                 var timer = setInterval(function(){
-                    if (loaded) {
+                    if (loaded || ++times == 30) {
                         clearInterval(timer);
-                        resolve(true);
-                    }
-                    if (++times == 30) {
-                        clearInterval(timer);
-                        resolve(false);
+                        resolve(loaded);
                     }
                 }, 100);
             }
         });
     };
     MetahubJS.login = function(options) {
-        var opts = Object.assign(options || {}, { appName: appName, chainId: chainId});
-        return wallet.login(opts);
+        if (!options.appName) {
+            options.appName = location ? location.host : '';
+        }
+        if (!options.chainId) {
+            options.chainId = 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906';
+        }
+        return wallet.login(options);
     };
     Object.defineProperty(MetahubJS, 'identity', {
         enumerable: false,
