@@ -1,6 +1,8 @@
 # metahubjs
 
-Javascript API for integration metahub wallet.
+Javascript API for integration metahub wallet.  
+
+[View Example](https://github.com/metahubwallet/metahubjs-example)
 
 ## Installation
 
