@@ -127,4 +127,4 @@ class MetahubJS {
     }
 }
 
-export default MetahubJS;
+export default new MetahubJS();
