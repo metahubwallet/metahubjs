@@ -1,6 +1,6 @@
 {
   "name": "metahubjs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "metahub javascript sdk",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -12,6 +12,10 @@
       "require": "./dist/index.cjs"
     }
   },
+  "files": [
+    "src/",
+    "dist/"
+  ],
   "scripts": {
     "build": "tsc --noEmit && rollup -c"
   },
