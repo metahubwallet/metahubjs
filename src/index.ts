@@ -114,12 +114,12 @@ class MetahubJS {
         return await wallet.getArbitrarySignature(publicKey, data);
     }
 
-    async eos<T>(network: NetworkAccount, Api: T, options: any): Promise<T>  {
-        return (await wallet.eos(network, Api, options)) as T;
+    eos<T>(network: NetworkAccount, Api: T, options: any): T  {
+        return wallet.eos(network, Api, options) as T;
     }
 
-    async eosHook(network: NetworkAccount): Promise<any>  {
-        return await wallet.eosHook(network);
+    eosHook(network: NetworkAccount): any  {
+        return wallet.eosHook(network);
     }
 
     async getVersion(): Promise<string>  {
