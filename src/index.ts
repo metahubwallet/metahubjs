@@ -114,7 +114,7 @@ class MetahubJS {
         return await wallet.getArbitrarySignature(publicKey, data);
     }
 
-    eos<T>(network: NetworkAccount, Api: T, options: any): T  {
+    eos<T>(network: NetworkAccount, Api: {new():T}, options: any): T  {
         return wallet.eos(network, Api, options) as T;
     }
 
