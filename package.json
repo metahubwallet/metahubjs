@@ -1,6 +1,6 @@
 {
   "name": "metahubjs",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "metahub javascript sdk",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

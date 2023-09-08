@@ -1,12 +1,12 @@
 export const EOS_CHAIN_ID = 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906';
 
-let wallet: any = null;
+let provider: any = null;
 const metahubLoaded = () => {
-    if (wallet != null) {
+    if (provider != null) {
         return;
     }
     const win = (window as any);
-    wallet = win.metahub ? win.metahub : win.scatter;
+    provider = win.metahub ? win.metahub : win.scatter;
 }
 document.addEventListener('metahubLoaded', metahubLoaded);
 document.addEventListener('scatterLoaded', metahubLoaded);
@@ -59,7 +59,7 @@ class MetahubWallet {
     private options: ConnectOptions = {};
 
     public get identity(): Identity | null {
-        return wallet.identity;
+        return provider.identity;
     }
 
     async connect(appName: string = '', options: ConnectOptions = {}): Promise<boolean> {
@@ -68,14 +68,14 @@ class MetahubWallet {
         }
         this.options = Object.assign(this.options, options);
         return new Promise(function(resolve) {
-            if (wallet != null) {
+            if (provider != null) {
                 resolve(true);
             } else {
                 let times = 0;
                 let timer = setInterval(function(){
-                    if (wallet != null || ++times == 30) {
+                    if (provider != null || ++times == 30) {
                         clearInterval(timer);
-                        resolve(wallet != null);
+                        resolve(provider != null);
                     }
                 }, 100);
             }
@@ -89,52 +89,56 @@ class MetahubWallet {
         if (!options.chainId) {
             options.chainId = this.options.network ? this.options.network.chainId : EOS_CHAIN_ID;
         }
-        return await wallet.login(options);
+        return await provider.login(options);
     }
 
 
     async hasAccountFor(network: Network): Promise<boolean>  {
-        return await wallet.hasAccountFor(network);
+        return await provider.hasAccountFor(network);
     }
 
     async getIdentity(options: LoginOptions = {}): Promise<Identity>  {
-        return await wallet.getIdentity(options);
+        return await provider.getIdentity(options);
     }
 
     async logout(account: string | undefined = undefined): Promise<Identity | null>  {
-        return await wallet.logout(account);
+        return await provider.logout(account);
     }
 
     async forgetIdentity(account: string | undefined = undefined): Promise<Identity | null>  {
-        return await wallet.forgetIdentity(account);
+        return await provider.forgetIdentity(account);
     }
 
     async getIdentityFromPermissions(): Promise<Identity | null>   {
-        return await wallet.getIdentityFromPermissions();
+        return await provider.getIdentityFromPermissions();
     }
 
     async suggestNetwork(network: Network): Promise<void>  {
-        return await wallet.suggestNetwork(network);
+        return await provider.suggestNetwork(network);
     }
 
     async addToken(token: Token): Promise<void>  {
-        return await wallet.addToken(token);
+        return await provider.addToken(token);
     }
 
     async getArbitrarySignature(publicKey: string, data: string): Promise<string>  {
-        return await wallet.getArbitrarySignature(publicKey, data);
+        return await provider.getArbitrarySignature(publicKey, data);
     }
 
     eos<T>(network: Network, Api: { new(...args: any[]): T }, options: any): T  {
-        return wallet.eos(network, Api, options) as T;
+        return provider.eos(network, Api, options) as T;
     }
 
     eosHook(network: Network): any  {
-        return wallet.eosHook(network);
+        return provider.eosHook(network);
     }
 
     async getVersion(): Promise<string>  {
-        return await wallet.getVersion();
+        return await provider.getVersion();
+    }
+
+    isMetahub(): boolean {
+        return typeof provider.isMetahub == 'function' ? provider.isMetahub() : false;
     }
 }
 
