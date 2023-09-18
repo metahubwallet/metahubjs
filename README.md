@@ -21,14 +21,15 @@ const { Api, JsonRpc } = require('eosjs');
 const appName = 'Your App Name';
 const chainId = 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906';
 const rpcUrl = 'https://eos.greymass.com';
+const network = { chainId };
 
 // connect
-const connected = await metahubjs.connect();
+const connected = await metahubjs.connect(appName, { network });
 if (!connected) {
     throw new Error('no metahub');
 }
 
-const network = { chainId };
+
 const rpc = new JsonRpc(rpcUrl, { fetch });
 const api = metahubjs.eos(network, Api, { rpc });
 // get logined accounts
@@ -38,7 +39,7 @@ if (metahubjs.identity) {
 }
 
 // login
-const identity = await metahubjs.login({ appName, chainId });
+const identity = await metahubjs.login();
 // if success, will response
 {
     "accounts": [
