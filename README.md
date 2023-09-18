@@ -29,7 +29,6 @@ if (!connected) {
     throw new Error('no metahub');
 }
 
-
 const rpc = new JsonRpc(rpcUrl, { fetch });
 const api = metahubjs.eos(network, Api, { rpc });
 // get logined accounts
