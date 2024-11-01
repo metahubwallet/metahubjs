@@ -1,15 +1,18 @@
 export const EOS_CHAIN_ID = 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906';
 
 let provider: any = null;
+const win = (window as any);
 const metahubLoaded = () => {
     if (provider != null) {
         return;
     }
-    const win = (window as any);
     provider = win.metahub ? win.metahub : win.scatter;
 }
 document.addEventListener('metahubLoaded', metahubLoaded);
 document.addEventListener('scatterLoaded', metahubLoaded);
+if (win.metahub || win.scatter) {
+    metahubLoaded();
+}
 
 export interface Network {
     blockchain: string;
@@ -44,7 +47,8 @@ export interface Token {
 }
 
 export interface ConnectOptions {
-    network?: Network;
+    network?: Partial<Network>;
+    chainId?: string;
 }
 
 export interface LoginOptions {
@@ -56,7 +60,7 @@ export interface LoginOptions {
 
 class MetahubWallet {
     private appName: string = '';
-    private options: ConnectOptions = {};
+    private network: Partial<Network> = {};
 
     public get identity(): Identity | null {
         return provider.identity;
@@ -66,7 +70,12 @@ class MetahubWallet {
         if (appName) {
             this.appName = appName;
         }
-        this.options = Object.assign(this.options, options);
+        if (options.network) {
+            this.network = Object.assign(this.network, options.network);
+        } else if (options.chainId) {
+            this.network.chainId = options.chainId;
+        }
+        
         return new Promise(function(resolve) {
             if (provider != null) {
                 resolve(true);
@@ -87,7 +96,7 @@ class MetahubWallet {
             options.appName = this.appName || (location ? location.host : '');
         }
         if (!options.chainId) {
-            options.chainId = this.options.network ? this.options.network.chainId : EOS_CHAIN_ID;
+            options.chainId = this.network && this.network.chainId ? this.network.chainId : EOS_CHAIN_ID;
         }
         return await provider.login(options);
     }

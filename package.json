@@ -1,6 +1,6 @@
 {
   "name": "metahubjs",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "metahub javascript sdk",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -40,5 +40,8 @@
     "rollup": "^3.28.1",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "rollup-plugin-esbuild-minify": "^1.1.2"
   }
 }
